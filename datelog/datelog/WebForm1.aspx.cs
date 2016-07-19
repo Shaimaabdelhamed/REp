@@ -30,7 +30,7 @@ namespace requiredtasks
         private void Timer1_Tick(object sender, EventArgs e)
         {
             counter = (int) ViewState["counter"];          
-            ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", "alert('"+ counter+"' )", true);          
+           // ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "alertMessage", "alert('"+ counter+"' )", true);          
             report rprt = new report();
             int count = (int) ViewState["counter"];
             Label1.Text = count.ToString();
