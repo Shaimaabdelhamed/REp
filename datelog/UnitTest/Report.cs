@@ -13,6 +13,7 @@ namespace UnitTest
         {
             report re = new report();
             Assert.AreEqual(re.Writetxt("hi", null), true);
+            //hello
         }
     }
 }
