@@ -24,7 +24,7 @@ namespace requiredtasks
             Timer1.Tick += Timer1_Tick;
             path = Server.MapPath("~/");
             Image1.ImageUrl = @"\imgas\ho1.jpg";
-
+            //hello
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
