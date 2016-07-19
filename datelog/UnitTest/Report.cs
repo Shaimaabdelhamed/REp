@@ -12,7 +12,7 @@ namespace UnitTest
         public void WriteTxt_null_false()
         {
             report re = new report();
-            Assert.AreEqual(re.Writetxt("hi", null), true);
+            Assert.AreEqual(re.Writetxt("hi", null), false);
             //hello
         }
     }
