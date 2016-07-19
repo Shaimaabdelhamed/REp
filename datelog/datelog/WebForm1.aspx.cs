@@ -40,7 +40,7 @@ namespace requiredtasks
             using (StreamWriter w = File.AppendText(@path + @"\log.txt"))
             {
                 rprt.Writetxt("Hi", w);
-                
+                //math.path
             }
            
         }
