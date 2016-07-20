@@ -64,14 +64,6 @@ SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
 :: ----------
-:: run tests  mycode
-
-%MSBUILD_PATH% UnitTest\UnitTest.csproj
-IF !ERRORLEVEL!NEQ 0 goto error
-
-"%DEPLOYMENT_SOURCE%\packages\xunit.runners.1.9.1\tools\xunit.console.clr4.exe" "%DEPLOYMENT_SOURCE%\UnitTest\bin\Debug\UnitTest.dll" 
-IF !ERRORLEVEL! NEQ 0 goto error
-
 
 echo Handling .NET Web Application deployment.
 
@@ -87,16 +79,31 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
 ) ELSE (
   call :ExecuteCmd "%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%\datelog\datelog\datelog.csproj" /nologo /verbosity:m /t:Build /p:AutoParameterizationWebConfigConnectionStrings=false;Configuration=Release;UseSharedCompilation=false /p:SolutionDir="%DEPLOYMENT_SOURCE%\datelog\\" %SCM_BUILD_ARGS%
 )
+
 IF !ERRORLEVEL! NEQ 0 goto error
 
+:: ADDED THIS BELLOW --------------------------
+:: 3. Building test projects 
+rem echo Building test projects 
+"%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%\datelog.sln" /p:Configuration=Release;VisualStudioVersion=14.0 /verbosity:m /p:Platform="Any CPU" 
 
+IF !ERRORLEVEL! NEQ 0 (
+ 	echo Build failed with ErrorLevel NEQ 0
+ 	goto error
+)
 
+:: 4. Running tests 
+echo Running tests 
+vstest.console.exe "%DEPLOYMENT_SOURCE%\UnitTest\bin\Debug\UnitTest.dll" 
+IF !ERRORLEVEL! NEQ 0 goto error 
+:: ADDED THIS ABOVE --------------------------
 
-:: 3. KuduSync
+:: 5. KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_TEMP%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
+
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 goto end
