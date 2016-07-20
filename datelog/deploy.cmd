@@ -64,6 +64,14 @@ SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
 :: ----------
+:: run tests  mycode
+
+%MSBUILD_PATH% UnitTest\UnitTest.csproj
+IF !ERRORLEVEL!NEQ 0 goto error
+
+"%DEPLOYMENT_SOURCE%\packages\xunit.runners.1.9.1\tools\xunit.console.clr4.exe" "%DEPLOYMENT_SOURCE%\UnitTest\bin\Debug\UnitTest.dll" 
+IF !ERRORLEVEL! NEQ 0 goto error
+
 
 echo Handling .NET Web Application deployment.
 
@@ -81,13 +89,7 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
 )
 IF !ERRORLEVEL! NEQ 0 goto error
 
-:: run tests  mycode
 
-%MSBUILD_PATH% UnitTest\UnitTest.csproj
-IF !ERRORLEVEL!NEQ 0 goto error
-
-"%DEPLOYMENT_SOURCE%\packages\xunit.runners.1.9.1\tools\xunit.console.clr4.exe" "%DEPLOYMENT_SOURCE%\UnitTest\bin\Debug\UnitTest.dll" 
-IF !ERRORLEVEL! NEQ 0 goto error
 
 
 :: 3. KuduSync
