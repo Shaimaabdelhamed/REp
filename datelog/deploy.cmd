@@ -86,7 +86,7 @@ IF !ERRORLEVEL! NEQ 0 goto error
 %MSBUILD_PATH% UnitTest\UnitTest.csproj
 IF !ERRORLEVEL!NEQ 0 goto error
 
-"%DEPLOYMENT_SOURCE%\packages\nunit.runners.1.9.1\tools\nunit.console.clr4.exe" "%DEPLOYMENT_SOURCE%\UnitTest\bin\Debug\UnitTest.dll" 
+"%DEPLOYMENT_SOURCE%\packages\xunit.runners.1.9.1\tools\xunit.console.clr4.exe" "%DEPLOYMENT_SOURCE%\UnitTest\bin\Debug\UnitTest.dll" 
 IF !ERRORLEVEL! NEQ 0 goto error
 
 
