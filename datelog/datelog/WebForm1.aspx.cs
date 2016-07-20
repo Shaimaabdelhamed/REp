@@ -44,5 +44,16 @@ namespace requiredtasks
             }
            
         }
+
+        protected void LinkButton1_Click(object sender, EventArgs e)
+        {
+            Response.ContentType = "APPLICATION/OCTET-STREAM";
+            String Header = "Attachment; Filename=XMLFile.xml";
+            Response.AppendHeader("Content-Disposition", Header);
+            System.IO.FileInfo Dfile = new System.IO.FileInfo(Server.MapPath("log.txt"));
+            Response.WriteFile(Dfile.FullName);
+            //Don't forget to add the following line
+            Response.End();
+        }
     }
 }

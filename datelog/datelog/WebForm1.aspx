@@ -36,6 +36,13 @@
 
                    <asp:Timer ID="Timer1" runat="server" Interval="5000"></asp:Timer>             
         Number Of Written Dates is :    <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
+
+            <div class="row"></div>
+             <div class="row"></div>
+             <div class="row"></div>
+             <div class="row">
+                 <asp:LinkButton ID="LinkButton1" runat="server" OnClick="LinkButton1_Click">Dowenload Log File</asp:LinkButton>
+             </div>
         </div>
     
     </div>
