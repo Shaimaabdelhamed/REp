@@ -64,7 +64,13 @@ SET MSBUILD_PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
 :: ----------
+:: 1. Tests
+echo 2: Build and execute tests
 
+echo 2a: Executing Unit Tests: CloudSiteTests
+%MSBUILD_PATH% "%DEPLOYMENT_SOURCE%\UnitTest\UnitTest.csproj" /nologo /verbosity:m /t:Build /p:Configuration=Debug
+call "tools/nunit-console.exe" "%DEPLOYMENT_SOURCE%\UnitTest\bin\Debug\UnitTest.dll"
+IF !ERRORLEVEL! NEQ 0 goto error
 
 :: 2. Build to the temporary path
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
@@ -74,22 +80,15 @@ IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
 )
 IF !ERRORLEVEL! NEQ 0 goto error
 
-:: run tests  mycode
-
-call :ExecuteCmd "%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%\UnitTest\UnitTest.csproj"
-IF !ERRORLEVEL!NEQ 0 goto error
-
-vstest.console.exe "%DEPLOYMENT_SOURCE%\UnitTest\bin\Debug\UnitTest.dll" 
-IF !ERRORLEVEL! NEQ 0 goto error 
 
 
 echo Handling .NET Web Application deployment.
 
 :: 1. Restore NuGet packages
-IF /I "datelog\datelog.sln" NEQ "" (
-  call :ExecuteCmd nuget restore "%DEPLOYMENT_SOURCE%\datelog\datelog.sln"
-  IF !ERRORLEVEL! NEQ 0 goto error
-)
+::IF /I "datelog\datelog.sln" NEQ "" (
+  ::call :ExecuteCmd nuget restore "%DEPLOYMENT_SOURCE%\datelog\datelog.sln"
+  ::IF !ERRORLEVEL! NEQ 0 goto error
+::)
 
 
 :: 3. KuduSync
