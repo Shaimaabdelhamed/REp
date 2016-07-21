@@ -76,7 +76,7 @@ IF !ERRORLEVEL! NEQ 0 goto error
 
 :: run tests  mycode
 
-%MSBUILD_PATH% UnitTest\UnitTest.csproj
+call :ExecuteCmd "%MSBUILD_PATH%" "%DEPLOYMENT_SOURCE%\UnitTest\UnitTest.csproj"
 IF !ERRORLEVEL!NEQ 0 goto error
 
 vstest.console.exe "%DEPLOYMENT_SOURCE%\UnitTest\bin\Debug\UnitTest.dll" 
